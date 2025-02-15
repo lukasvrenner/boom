@@ -1,8 +1,8 @@
+AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: None
-AlignConsecutiveAssignments:
-  Enabled: false
-AlignConsecutiveBitFields:
-  Enabled: false
+AlignConsecutiveAssignments: None
+AlignConsecutiveBitFields: None
+AlignConsecutiveDeclarations: None
 AllowAllArgumentsOnNextLine: true
 AllowShortBlocksOnASingleLine: Empty
 AlwaysBreakAfterDefinitionReturnType: None

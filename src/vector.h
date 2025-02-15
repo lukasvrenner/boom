@@ -1,5 +1,23 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 #include <stddef.h>
 
-double dot_product(const double *a, const double *b, size_t n);
+struct VectorSlice {
+    /* The number of elements in the vector */
+    size_t len;
+    /* The distance between each element in units of doubles */
+    ptrdiff_t stride;
+    const double *data;
+};
 
-void cross_product(double (*out)[3], const double (*a)[3], const double (*b)[3]);
+struct VectorSliceMut {
+    /* The number of elements in the vector */
+    size_t len;
+    /* The distance between each element in units of doubles */
+    ptrdiff_t stride;
+    double *data;
+};
+
+double vec_dot_product(const struct VectorSlice *a, const struct VectorSlice *b);
+#endif /* VECTOR_H */
