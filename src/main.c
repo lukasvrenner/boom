@@ -1,5 +1,7 @@
-#include "matrix.h"
 #include <stdlib.h>
+#include <stdio.h>
+
+#include "matrix.h"
 
 int main()
 {
@@ -22,4 +24,10 @@ int main()
 
     mat_mul(mat_a, mat_b, mat_product);
     mat_print(mat_product);
+
+    mat_set_ident(mat_a);
+    mat_print(mat_a);
+
+    mat_mul(mat_a, mat_b, mat_product);
+    printf("mat_a == mat_b: %d\n", mat_eq(mat_b, mat_product));
 }

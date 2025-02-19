@@ -1,9 +1,9 @@
-#include "matrix.h"
 #include <assert.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 
-/*#include <stdlib.h>*/
+#include "matrix.h"
 
 void mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out)
 {
@@ -28,4 +28,30 @@ void mat_print(const struct Matrix *matrix)
         }
         fputs("]\n", stdout);
     }
+}
+
+void mat_set_ident(struct Matrix *matrix)
+{
+    for (size_t i = 0; i < matrix->rows; i++) {
+        for (size_t j = 0; j < i; j++) {
+            matrix->data[i * matrix->cols + j] = 0;
+        }
+
+        matrix->data[i * matrix->cols + i] = 1;
+
+        for (size_t j = i + 1; j < matrix->cols; j++) {
+            matrix->data[i * matrix->cols + j] = 0;
+        }
+    }
+}
+
+bool mat_eq(const struct Matrix *a, const struct Matrix *b)
+{
+    bool eq = a->rows == b->rows && a->cols == b->cols;
+    if (!eq)
+        return false;
+    for (size_t i = 0; i < a->rows * a->cols; i++) {
+        eq &= a->data[i] == b->data[i];
+    }
+    return eq;
 }
