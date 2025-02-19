@@ -1,15 +1,18 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+
+#include "vector.h"
 
 struct Matrix {
     size_t rows, cols;
     double data[];
 };
 
-void mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out);
+int mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out);
+int mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out);
 
 void mat_print(const struct Matrix *matrix);
 
