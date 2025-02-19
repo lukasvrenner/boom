@@ -69,6 +69,13 @@ void mat_set_ident(struct Matrix *matrix)
     }
 }
 
+void mat_set_zero(struct Matrix *matrix)
+{
+    for (size_t i = 0; i < matrix->rows * matrix->cols; i++) {
+        matrix->data[i] = 0;
+    }
+}
+
 bool mat_eq(const struct Matrix *a, const struct Matrix *b)
 {
     bool eq = a->rows == b->rows && a->cols == b->cols;
@@ -78,4 +85,43 @@ bool mat_eq(const struct Matrix *a, const struct Matrix *b)
         eq &= a->data[i] == b->data[i];
     }
     return eq;
+}
+
+int mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)
+{
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return -1;
+    }
+    if (a->rows != out->rows || a->cols != out->cols) {
+        return -1;
+    }
+    for (size_t i = 0; i < a->rows * a->cols; i++) {
+        out->data[i] = a->data[i] + b->data[i];
+    }
+    return 1;
+}
+
+int mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)
+{
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return -1;
+    }
+    if (a->rows != out->rows || a->cols != out->cols) {
+        return -1;
+    }
+    for (size_t i = 0; i < a->rows * a->cols; i++) {
+        out->data[i] = a->data[i] - b->data[i];
+    }
+    return 1;
+}
+
+int mat_mul_scalar(const struct Matrix *a, double scalar, struct Matrix *out)
+{
+    if (a->rows != out->rows || a->cols != out->cols) {
+        return -1;
+    }
+    for (size_t i = 0; i < a->rows * a->cols; i++) {
+        out->data[i] = a->data[i] * scalar;
+    }
+    return 1;
 }
