@@ -43,14 +43,14 @@ int mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *r
     return 1;
 }
 
-void mat_print(const struct Matrix *matrix)
+void mat_print(const struct Matrix *matrix, FILE *stream)
 {
     for (size_t i = 0; i < matrix->rows; i++) {
-        fputs("[ ", stdout);
+        fputs("[ ", stream);
         for (size_t j = 0; j < matrix->cols; j++) {
-            printf("%f, ", matrix->data[i * matrix->cols + j]);
+            fprintf(stream, "%f, ", matrix->data[i * matrix->cols + j]);
         }
-        fputs("]\n", stdout);
+        fputs("]\n", stream);
     }
 }
 

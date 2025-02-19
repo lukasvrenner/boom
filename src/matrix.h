@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdio.h>
 
 #include "vector.h"
 
@@ -14,7 +15,7 @@ struct Matrix {
 int mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out);
 int mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out);
 
-void mat_print(const struct Matrix *matrix);
+void mat_print(const struct Matrix *matrix, FILE *stream);
 
 void mat_set_ident(struct Matrix *matrix);
 

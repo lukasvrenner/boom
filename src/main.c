@@ -25,10 +25,10 @@ int main(void)
 
     assert(mat_mul(mat_a, mat_b, mat_product) >= 0);
 
-    mat_print(mat_product);
+    mat_print(mat_product, stdout);
 
     mat_set_ident(mat_a);
-    mat_print(mat_a);
+    mat_print(mat_a, stdout);
 
     assert(mat_mul(mat_a, mat_b, mat_product) >= 0);
 
