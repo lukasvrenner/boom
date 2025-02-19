@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "matrix.h"
 #include "vector.h"
@@ -56,23 +57,9 @@ void mat_print(const struct Matrix *matrix, FILE *stream)
 
 void mat_set_ident(struct Matrix *matrix)
 {
-    for (size_t i = 0; i < matrix->rows; i++) {
-        for (size_t j = 0; j < i; j++) {
-            matrix->data[i * matrix->cols + j] = 0;
-        }
-
+    memset(matrix->data, 0, sizeof(double) * matrix->rows * matrix->cols);
+    for (size_t i = 0; i < matrix->rows && i < matrix->cols; i++) {
         matrix->data[i * matrix->cols + i] = 1;
-
-        for (size_t j = i + 1; j < matrix->cols; j++) {
-            matrix->data[i * matrix->cols + j] = 0;
-        }
-    }
-}
-
-void mat_set_zero(struct Matrix *matrix)
-{
-    for (size_t i = 0; i < matrix->rows * matrix->cols; i++) {
-        matrix->data[i] = 0;
     }
 }
 
