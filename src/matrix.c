@@ -65,13 +65,10 @@ void mat_set_ident(struct Matrix *matrix)
 
 bool mat_eq(const struct Matrix *a, const struct Matrix *b)
 {
-    bool eq = a->rows == b->rows && a->cols == b->cols;
-    if (!eq)
+    if (a->rows != b->rows || a->cols != b->cols) {
         return false;
-    for (size_t i = 0; i < a->rows * a->cols; i++) {
-        eq &= a->data[i] == b->data[i];
     }
-    return eq;
+    return memcmp(a->data, b->data, a->rows * a->cols) == 0;
 }
 
 int mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)

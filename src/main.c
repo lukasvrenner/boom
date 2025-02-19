@@ -32,5 +32,5 @@ int main(void)
 
     assert(mat_mul(mat_a, mat_b, mat_product) >= 0);
 
-    printf("mat_a == mat_b: %d\n", mat_eq(mat_b, mat_product));
+    printf("mat_b == mat_product: %d\n", mat_eq(mat_b, mat_product));
 }
