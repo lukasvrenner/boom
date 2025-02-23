@@ -8,7 +8,14 @@ struct Vector {
     double data[];
 };
 
+/**
+ * Returns `a * b`.
+ */
 double vec_dot_product(const struct Vector *a, const struct Vector *b);
+
+void vec_cross_product(const struct Vector *a, const struct Vector *b, struct Vector *restrict out);
+
+void vec_cross_product_assign(struct Vector *a, const struct Vector *b);
 
 void vec_print(const struct Vector *vec);
 
