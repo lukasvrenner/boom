@@ -22,18 +22,19 @@ struct Matrix {
  * Multiplies `a` and `b`, storing the result in `out`.
  *
  * `out` may not point to the same matrix as `a` or `b`.
+ *
+ * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-void mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out);
+int mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out);
 
 /**
  * Multiplies `a * b`, storing the result in `out`.
  *
  * `out` may not point to the same vector as `b`.
  *
- * Returns `-1` and does not perform the multiplication if `out` has incorrect dimensions.
- * Otherwise, returns `1`.
+ * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-void mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out);
+int mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out);
 
 /**
  * Prints `matrix` to `stream`.
@@ -47,7 +48,7 @@ void mat_set_ident(struct Matrix *a);
 
 /**
  * Returns `true` if `a` equals `b`.
- * Otherwise, returns false.
+ * Otherwise returns false.
  */
 bool mat_eq(const struct Matrix *a, const struct Matrix *b);
 
@@ -59,27 +60,25 @@ bool mat_eq(const struct Matrix *a, const struct Matrix *b);
  * Returns `-1` and does not perform the multiplication if `out` has incorrect dimensions.
  * Otherwise, returns `1`.
  */
-void mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
+int mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
 
 /**
  * Subtracts `b` from `a`, storing the result in `out`.
  *
  * `out` may point to the same matrix as `a` or `b`.
  *
- * Returns `-1` and does not perform the multiplication if `out` has incorrect dimensions.
- * Otherwise, returns `1`.
+ * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-void mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
+int mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
 
 /**
  * Multiplies `a` and `scalar`, storing the result in `out`.
  *
  * `out` may point to the same matrix as `a` or `b`.
  *
- * Returns `-1` and does not perform the multiplication if `out` has incorrect dimensions.
- * Otherwise, returns `1`.
+ * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-void mat_mul_scalar(const struct Matrix *a, double scalar, struct Matrix *out);
+int mat_mul_scalar(const struct Matrix *a, double scalar, struct Matrix *out);
 
 double mat_det(const struct Matrix *a);
 

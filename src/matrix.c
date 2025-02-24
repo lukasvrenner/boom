@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -7,9 +6,14 @@
 #include "matrix.h"
 #include "vector.h"
 
-void mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out)
+int mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out)
 {
-    assert(a->cols == b->rows && out->rows == a->rows && out->cols == b->cols);
+    if (a->cols != b->rows) {
+        return -1;
+    }
+    if (out->rows != a->rows || out->cols != b->cols) {
+        return -1;
+    }
     for (size_t i = 0; i < a->rows; i++) {
         for (size_t j = 0; j < b->cols; j++) {
             double dot_product = 0;
@@ -19,11 +23,17 @@ void mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *rest
             out->data[i * out->cols + j] = dot_product;
         }
     }
+    return 0;
 }
 
-void mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out)
+int mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out)
 {
-    assert(a->cols == b->len && out->len == a->rows);
+    if (a->cols != b->len) {
+        return -1;
+    }
+    if (out->len != a->rows) {
+        return -1;
+    }
     for (size_t i = 0; i < a->rows; i++) {
         double dot_product = 0;
         for (size_t j = 0; j < a->cols; j++) {
@@ -31,6 +41,7 @@ void mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *
         }
         out->data[i] = dot_product;
     }
+    return 0;
 }
 
 void mat_print(const struct Matrix *a, FILE *stream)
@@ -60,26 +71,41 @@ bool mat_eq(const struct Matrix *a, const struct Matrix *b)
     return memcmp(a->data, b->data, a->rows * a->cols) == 0;
 }
 
-void mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)
+int mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)
 {
-    assert(a->rows == b->rows && a->cols == b->cols && a->rows == out->rows && a->cols == out->cols);
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return -1;
+    }
+    if (a->rows != out->rows || a->cols != out->cols) {
+        return -1;
+    }
     for (size_t i = 0; i < a->rows * a->cols; i++) {
         out->data[i] = a->data[i] + b->data[i];
     }
+    return 0;
 }
 
-void mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)
+int mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out)
 {
-    assert(a->rows == b->rows && a->cols == b->cols && a->rows == out->rows && a->cols == out->cols);
+    if (a->rows != b->rows || a->cols != b->cols) {
+        return -1;
+    }
+    if (a->rows != out->rows || a->cols != out->cols) {
+        return -1;
+    }
     for (size_t i = 0; i < a->rows * a->cols; i++) {
         out->data[i] = a->data[i] - b->data[i];
     }
+    return 0;
 }
 
-void mat_mul_scalar(const struct Matrix *a, double scalar, struct Matrix *out)
+int mat_mul_scalar(const struct Matrix *a, double scalar, struct Matrix *out)
 {
-    assert(a->rows == out->rows && a->cols == out->cols);
+    if (a->rows != out->rows || a->cols != out->cols) {
+        return -1;
+    }
     for (size_t i = 0; i < a->rows * a->cols; i++) {
         out->data[i] = a->data[i] * scalar;
     }
+    return 0;
 }
