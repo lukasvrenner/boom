@@ -1,22 +1,25 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include "matrix.h"
+
 #include <stddef.h>
 
-struct Vector {
-    size_t len;
-    double data[];
-};
+/**
+ * Calculates the projection of `a` onto `b`, storing the result in `out`.
+ * Returns `-1` if `b` and `out` don't have the same number of dimensions, else returns `0`.
+ */
+int boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
+
+int boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
 
 /**
- * Returns `a * b`.
+ * Returns the dot-product of `a` and `b`.
  */
-double vec_dot_product(const struct Vector *a, const struct Vector *b);
+double boom_vec_dot_product(const struct BoomMatrix *a, const struct BoomMatrix *b);
 
-int vec_cross_product(const struct Vector *a, const struct Vector *b, struct Vector *restrict out);
+int boom_vec_cross_product(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out);
 
-int vec_cross_product_assign(struct Vector *a, const struct Vector *b);
-
-void vec_print(const struct Vector *vec);
+void boom_vec_print(const struct BoomMatrix *vec);
 
 #endif /* VECTOR_H */

@@ -10,7 +10,7 @@
 /*
  * An arbitrarily-sized row-major matrix.
  */
-struct Matrix {
+struct BoomMatrix {
     size_t rows, cols;
     /**
      * The raw data of the matrix. The length must equal `rows * cols`.
@@ -25,32 +25,23 @@ struct Matrix {
  *
  * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-int mat_mul(const struct Matrix *a, const struct Matrix *b, struct Matrix *restrict out);
-
-/**
- * Multiplies `a * b`, storing the result in `out`.
- *
- * `out` may not point to the same vector as `b`.
- *
- * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
- */
-int mat_mul_vec(const struct Matrix *a, const struct Vector *b, struct Vector *restrict out);
+int boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out);
 
 /**
  * Prints `matrix` to `stream`.
  */
-void mat_print(const struct Matrix *a, FILE *stream);
+void boom_mat_print(const struct BoomMatrix *a, FILE *stream);
 
 /**
  * Sets `matrix` to the identity matrix.
  */
-void mat_set_ident(struct Matrix *a);
+void boom_mat_set_ident(struct BoomMatrix *a);
 
 /**
  * Returns `true` if `a` equals `b`.
  * Otherwise returns false.
  */
-bool mat_eq(const struct Matrix *a, const struct Matrix *b);
+bool boom_mat_eq(const struct BoomMatrix *a, const struct BoomMatrix *b);
 
 /**
  * Adds `a` and `b`, storing the result in `out`.
@@ -60,7 +51,7 @@ bool mat_eq(const struct Matrix *a, const struct Matrix *b);
  * Returns `-1` and does not perform the multiplication if `out` has incorrect dimensions.
  * Otherwise, returns `1`.
  */
-int mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
+int boom_mat_add(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
 
 /**
  * Subtracts `b` from `a`, storing the result in `out`.
@@ -69,7 +60,7 @@ int mat_add(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
  *
  * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-int mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
+int boom_mat_sub(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
 
 /**
  * Multiplies `a` and `scalar`, storing the result in `out`.
@@ -78,8 +69,6 @@ int mat_sub(const struct Matrix *a, const struct Matrix *b, struct Matrix *out);
  *
  * Returns `-1` if there are mismatched dimensions. Otherwise returns `0`.
  */
-int mat_mul_scalar(const struct Matrix *a, double scalar, struct Matrix *out);
-
-double mat_det(const struct Matrix *a);
+int boom_mat_mul_scalar(const struct BoomMatrix *a, double scalar, struct BoomMatrix *out);
 
 #endif /* MATRIX_H */
