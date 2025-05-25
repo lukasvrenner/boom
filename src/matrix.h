@@ -5,8 +5,6 @@
 #include <stddef.h>
 #include <stdio.h>
 
-#include "vector.h"
-
 /*
  * An arbitrarily-sized row-major matrix.
  */
