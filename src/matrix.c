@@ -51,38 +51,3 @@ bool boom_mat_eq(const struct BoomMatrix *a, const struct BoomMatrix *b)
     }
     return memcmp(a->data, b->data, a->rows * a->cols) == 0;
 }
-
-int boom_mat_add(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
-{
-    if (a->rows != b->rows || a->cols != b->cols) {
-        return -1;
-    }
-    if (a->rows != out->rows || a->cols != out->cols) {
-        return -1;
-    }
-    for (size_t i = 0; i < a->rows * a->cols; i++) {
-        out->data[i] = a->data[i] + b->data[i];
-    }
-    return 0;
-}
-
-int boom_mat_sub(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
-{
-    if ((a->rows * a->cols != b->rows * b->cols) || (a->rows * a->cols != out->rows * out->cols))
-        return -1;
-    for (size_t i = 0; i < a->rows * a->cols; i++) {
-        out->data[i] = a->data[i] - b->data[i];
-    }
-    return 0;
-}
-
-int boom_mat_mul_scalar(const struct BoomMatrix *a, double scalar, struct BoomMatrix *out)
-{
-    if (a->rows != out->rows || a->cols != out->cols) {
-        return -1;
-    }
-    for (size_t i = 0; i < a->rows * a->cols; i++) {
-        out->data[i] = a->data[i] * scalar;
-    }
-    return 0;
-}

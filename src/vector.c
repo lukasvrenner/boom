@@ -1,11 +1,12 @@
-#include "vector.h"
-#include "matrix.h"
-
+#include <assert.h>
+#include <math.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
-#include <assert.h>
+
+#include "matrix.h"
+#include "vector.h"
 
 static size_t boom_vec_len(const struct BoomMatrix *a)
 {
@@ -22,16 +23,25 @@ int boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct
     double b_dot_b = boom_vec_dot_product(b, b);
     double scalar = a_dot_b / b_dot_b;
 
-    assert(boom_mat_mul_scalar(b, scalar, out) != -1);
+    assert(boom_vec_mul_scalar(b, scalar, out) >= 0);
     return 0;
 }
 
 int boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
 {
-    if (boom_vec_proj(a, b, out) == -1)
+    if (boom_vec_proj(a, b, out) < 0)
         return -1;
-    assert(boom_mat_sub(a, out, out) != -1);
+    assert(boom_vec_sub(a, out, out) >= 0);
     return 0;
+}
+
+double boom_vec_mag(const struct BoomMatrix *a)
+{
+    double dot = 0;
+    for (size_t i = 0; i < boom_vec_len(a); i++) {
+        dot += a->data[i] * a->data[i];
+    }
+    return sqrt(dot);
 }
 
 double boom_vec_dot_product(const struct BoomMatrix *a, const struct BoomMatrix *b)
@@ -64,11 +74,63 @@ int boom_vec_cross_product(const struct BoomMatrix *a, const struct BoomMatrix *
     return 0;
 }
 
-void boom_vec_print(const struct BoomMatrix *vec)
+int boom_vec_normalize(const struct BoomMatrix *a, struct BoomMatrix *out)
 {
-    fputs("[ ", stdout);
-    for (size_t i = 0; i < vec->rows * vec->cols; i++) {
-        printf("%f, ", vec->data[i]);
+    double mag = boom_vec_mag(a);
+    if (mag == 0)
+        return -2;
+    return boom_vec_mul_scalar(a, 1 / mag, out);
+}
+
+bool boom_vec_eq(const struct BoomMatrix *a, const struct BoomMatrix *b)
+{
+    if (boom_vec_len(a) != boom_vec_len(b)) {
+        return false;
     }
-    fputs("]\n", stdout);
+    return memcmp(a->data, b->data, boom_vec_len(a) * sizeof(double)) == 0;
+}
+
+int boom_vec_add(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
+{
+    if (boom_vec_len(a) != boom_vec_len(b) || boom_vec_len(a) != boom_vec_len(out))
+        return -1;
+    for (size_t i = 0; i < boom_vec_len(a); i++) {
+        out->data[i] = a->data[i] + b->data[i];
+    }
+    return 0;
+}
+
+int boom_vec_sub(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
+{
+    if (boom_vec_len(a) != boom_vec_len(b) || boom_vec_len(a) != boom_vec_len(out))
+        return -1;
+    for (size_t i = 0; i < boom_vec_len(a); i++) {
+        out->data[i] = a->data[i] - b->data[i];
+    }
+    return 0;
+}
+
+int boom_vec_mul_scalar(const struct BoomMatrix *a, double scalar, struct BoomMatrix *out)
+{
+    if (boom_vec_len(a) != boom_vec_len(out)) {
+        return -1;
+    }
+    for (size_t i = 0; i < boom_vec_len(a); i++) {
+        out->data[i] = a->data[i] * scalar;
+    }
+    return 0;
+}
+
+void boom_vec_print(const struct BoomMatrix *a, FILE *stream)
+{
+    fputs("[ ", stream);
+    for (size_t i = 0; i < boom_vec_len(a); i++) {
+        fprintf(stream, "%f, ", a->data[i]);
+    }
+    fputs("]\n", stream);
+}
+
+bool boom_vec_are_orth(const struct BoomMatrix *a, const struct BoomMatrix *b)
+{
+    return boom_vec_dot_product(a, b) == 0;
 }

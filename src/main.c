@@ -1,39 +1,40 @@
 #include <assert.h>
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "matrix.h"
+#include "vector.h"
 
 int main(void)
 {
-    struct BoomMatrix *mat_a = malloc(sizeof(struct BoomMatrix) + 9 * sizeof(double));
-    assert(mat_a != NULL);
-    mat_a->rows = 3;
-    mat_a->cols = 3;
+    struct BoomMatrix *vec_a = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
+    assert(vec_a != NULL);
+    vec_a->rows = 3;
+    vec_a->cols = 1;
 
-    struct BoomMatrix *mat_b = malloc(sizeof(struct BoomMatrix) + 9 * sizeof(double));
-    assert(mat_b != NULL);
-    mat_b->rows = 3;
-    mat_b->cols = 3;
+    struct BoomMatrix *vec_b = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
+    assert(vec_b != NULL);
+    vec_b->rows = 3;
+    vec_b->cols = 1;
 
-    struct BoomMatrix *mat_product = malloc(sizeof(struct BoomMatrix) + 9 * sizeof(double));
-    assert(mat_product != NULL);
-    mat_product->rows = 3;
-    mat_product->cols = 3;
+    double a[] = { 2, 8, 4 };
+    double b[] = { -2, 1, -3 };
 
-    for (int i = 0; i < 9; i++) {
-        mat_a->data[i] = (double) i + 1;
-        mat_b->data[8 - i] = (double) i + 1;
-    }
+    memcpy(vec_a->data, a, sizeof(a));
+    memcpy(vec_b->data, b, sizeof(b));
 
-    boom_mat_mul(mat_a, mat_b, mat_product);
+    boom_vec_orth(vec_a, vec_b, vec_b);
+    puts("orth of a onto b:");
+    boom_vec_print(vec_b, stdout);
 
-    boom_mat_print(mat_product, stdout);
+    boom_vec_normalize(vec_b, vec_b);
 
-    boom_mat_set_ident(mat_a);
-    boom_mat_print(mat_a, stdout);
+    puts("Normalized orth:");
+    boom_vec_print(vec_b, stdout);
 
-    boom_mat_mul(mat_a, mat_b, mat_product);
+    printf("Normalized magnitude: %f\n", boom_vec_mag(vec_b));
 
-    printf("mat_b == mat_product: %d\n", boom_mat_eq(mat_b, mat_product));
+    free(vec_a);
+    free(vec_b);
 }
