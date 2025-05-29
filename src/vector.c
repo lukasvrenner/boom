@@ -19,8 +19,8 @@ int boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct
     if (boom_vec_len(b) != boom_vec_len(out))
         return -1;
 
-    double a_dot_b = boom_vec_dot_product(a, b);
-    double b_dot_b = boom_vec_dot_product(b, b);
+    double a_dot_b = boom_vec_dot(a, b);
+    double b_dot_b = boom_vec_dot(b, b);
     double scalar = a_dot_b / b_dot_b;
 
     assert(boom_vec_mul_scalar(b, scalar, out) >= 0);
@@ -37,14 +37,14 @@ int boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct
 
 double boom_vec_mag(const struct BoomMatrix *a)
 {
-    double dot = 0;
+    double dot_product = 0;
     for (size_t i = 0; i < boom_vec_len(a); i++) {
-        dot += a->data[i] * a->data[i];
+        dot_product += a->data[i] * a->data[i];
     }
-    return sqrt(dot);
+    return sqrt(dot_product);
 }
 
-double boom_vec_dot_product(const struct BoomMatrix *a, const struct BoomMatrix *b)
+double boom_vec_dot(const struct BoomMatrix *a, const struct BoomMatrix *b)
 {
     size_t shortest_len;
     if (boom_vec_len(a) < boom_vec_len(b)) {
@@ -60,7 +60,12 @@ double boom_vec_dot_product(const struct BoomMatrix *a, const struct BoomMatrix 
     return result;
 }
 
-int boom_vec_cross_product(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
+double boom_vec_cos(const struct BoomMatrix *a, const struct BoomMatrix *b)
+{
+    return boom_vec_dot(a, b) / (boom_vec_mag(a) * boom_vec_mag(b));
+}
+
+int boom_vec_cross(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
 {
     if (boom_vec_len(a) != 3 || boom_vec_len(b) != 3 || boom_vec_len(out) != 3) {
         return -1;
@@ -132,5 +137,5 @@ void boom_vec_print(const struct BoomMatrix *a, FILE *stream)
 
 bool boom_vec_are_orth(const struct BoomMatrix *a, const struct BoomMatrix *b)
 {
-    return boom_vec_dot_product(a, b) == 0;
+    return boom_vec_dot(a, b) == 0;
 }

@@ -30,9 +30,14 @@ double boom_vec_mag(const struct BoomMatrix *a);
 /**
  * Returns the dot-product of `a` and `b`.
  */
-double boom_vec_dot_product(const struct BoomMatrix *a, const struct BoomMatrix *b);
+double boom_vec_dot(const struct BoomMatrix *a, const struct BoomMatrix *b);
 
-int boom_vec_cross_product(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out);
+/*
+ * Returns the cosine of the angle between `a` and `b`.
+ */
+double boom_vec_cos(const struct BoomMatrix *a, const struct BoomMatrix *b);
+
+int boom_vec_cross(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
 
 /**
  * Computes the normalized version of `a`, storing the result in `out`.

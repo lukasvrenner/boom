@@ -18,11 +18,15 @@ int main(void)
     vec_b->rows = 3;
     vec_b->cols = 1;
 
-    double a[] = { 2, 8, 4 };
-    double b[] = { -2, 1, -3 };
+    double a[] = { 6, 3, 0 };
+    double b[] = { 6, 0, 4 };
 
     memcpy(vec_a->data, a, sizeof(a));
     memcpy(vec_b->data, b, sizeof(b));
+
+    boom_vec_cross(vec_a, vec_b, vec_b);
+    printf("Cross-product magnitude: %f\n", boom_vec_mag(vec_b));
+    boom_vec_print(vec_b, stdout);
 
     boom_vec_orth(vec_a, vec_b, vec_b);
     puts("orth of a onto b:");
@@ -37,4 +41,5 @@ int main(void)
 
     free(vec_a);
     free(vec_b);
+    return 0;
 }
