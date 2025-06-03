@@ -15,6 +15,19 @@
  */
 
 /**
+ * Returns the dot-product of `a` and `b`.
+ */
+double boom_vec_dot(const struct BoomMatrix *a, const struct BoomMatrix *b);
+
+/**
+ * Returns `a` dot `a`. This might be more efficient than `boom_vec_dot(a, a)`
+ * because it doesn't check any bounds.
+ *
+ * TODO: verify performance improvement.
+ */
+double boom_vec_sqr(const struct BoomMatrix *a);
+
+/**
  * Calculates the projection of `a` onto `b`, storing the result in `out`.
  * Returns `-1` if `b` and `out` don't have the same number of dimensions, else returns `0`.
  */
@@ -26,11 +39,6 @@ int boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct
  * Returns the magnitude (Euclidean norm) of `a`.
  */
 double boom_vec_mag(const struct BoomMatrix *a);
-
-/**
- * Returns the dot-product of `a` and `b`.
- */
-double boom_vec_dot(const struct BoomMatrix *a, const struct BoomMatrix *b);
 
 /*
  * Returns the cosine of the angle between `a` and `b`.

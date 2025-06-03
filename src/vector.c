@@ -13,6 +13,31 @@ static size_t boom_vec_len(const struct BoomMatrix *a)
     return a->rows * a->cols;
 }
 
+double boom_vec_dot(const struct BoomMatrix *a, const struct BoomMatrix *b)
+{
+    size_t shortest_len;
+    if (boom_vec_len(a) < boom_vec_len(b)) {
+        shortest_len = boom_vec_len(a);
+    } else {
+        shortest_len = boom_vec_len(b);
+    }
+
+    double result = 0;
+    for (size_t i = 0; i < shortest_len; i++) {
+        result += a->data[i] * b->data[i];
+    }
+    return result;
+}
+
+double boom_vec_sqr(const struct BoomMatrix *a)
+{
+    double result = 0;
+    for (size_t i = 0; i < boom_vec_len(a); i++) {
+        result += a->data[i] * a->data[i];
+    }
+    return result;
+}
+
 int boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
 {
 
@@ -41,28 +66,12 @@ double boom_vec_mag(const struct BoomMatrix *a)
     for (size_t i = 0; i < boom_vec_len(a); i++) {
         dot_product += a->data[i] * a->data[i];
     }
-    return sqrt(dot_product);
-}
-
-double boom_vec_dot(const struct BoomMatrix *a, const struct BoomMatrix *b)
-{
-    size_t shortest_len;
-    if (boom_vec_len(a) < boom_vec_len(b)) {
-        shortest_len = boom_vec_len(a);
-    } else {
-        shortest_len = boom_vec_len(b);
-    }
-
-    double result = 0;
-    for (size_t i = 0; i < shortest_len; i++) {
-        result += a->data[i] * b->data[i];
-    }
-    return result;
+    return sqrt(boom_vec_sqr(a));
 }
 
 double boom_vec_cos(const struct BoomMatrix *a, const struct BoomMatrix *b)
 {
-    return boom_vec_dot(a, b) / (boom_vec_mag(a) * boom_vec_mag(b));
+    return boom_vec_dot(a, b) / sqrt(boom_vec_sqr(a) * boom_vec_sqr(b));
 }
 
 int boom_vec_cross(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
@@ -128,11 +137,11 @@ int boom_vec_mul_scalar(const struct BoomMatrix *a, double scalar, struct BoomMa
 
 void boom_vec_print(const struct BoomMatrix *a, FILE *stream)
 {
-    fputs("[ ", stream);
+    fputs("< ", stream);
     for (size_t i = 0; i < boom_vec_len(a); i++) {
         fprintf(stream, "%f, ", a->data[i]);
     }
-    fputs("]\n", stream);
+    fputs(">\n", stream);
 }
 
 bool boom_vec_are_orth(const struct BoomMatrix *a, const struct BoomMatrix *b)
