@@ -52,6 +52,11 @@ int boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct
     return 0;
 }
 
+double boom_vec_comp(const struct BoomMatrix *a, const struct BoomMatrix *b)
+{
+    return boom_vec_dot(a, b) / boom_vec_mag(b);
+}
+
 int boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
 {
     if (boom_vec_proj(a, b, out) < 0)

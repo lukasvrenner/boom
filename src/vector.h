@@ -33,6 +33,11 @@ double boom_vec_sqr(const struct BoomMatrix *a);
  */
 int boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
 
+/**
+ * Calculates the component of `a` onto `b`
+ */
+double boom_vec_comp(const struct BoomMatrix *a, const struct BoomMatrix *b);
+
 int boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
 
 /**
