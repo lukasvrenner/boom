@@ -6,25 +6,25 @@ LDFLAGS = -lm
 LDFLAGS_DEBUG = $(LDFLAGS)
 LDFLAGS_RELEASE = $(LDFLAGS)
 
-SRC_FILES = src/main.c src/matrix.c src/vector.c
+SRC = src/main.c src/matrix.c src/vector.c
 
-OBJ_FILES_DEBUG = $(SRC_FILES:%.c=build/%.o)
-DEP_FILES_DEBUG = $(OBJ_FILES_DEBUG:.o=.d)
+OBJ_DEBUG = $(SRC:%.c=build/%.o)
+DEP_DEBUG = $(OBJ_DEBUG:.o=.d)
 
-OBJ_FILES_RELEASE = $(SRC_FILES:%.c=buildrel/%.o)
-DEP_FILES_RELEASE = $(OBJ_FILES_RELEASE:.o=.d)
+OBJ_RELEASE = $(SRC:%.c=buildrel/%.o)
+DEP_RELEASE = $(OBJ_RELEASE:.o=.d)
 
-EXEC_NAME = boom
+NAME = boom
 
 all: debug
 
 ################
 # DEBUG MODE #
 ################
-debug: build/$(EXEC_NAME)
+debug: build/$(NAME)
 
-build/$(EXEC_NAME): $(OBJ_FILES_DEBUG)
-	cc $(OBJ_FILES_DEBUG) $(LDFLAGS_DEBUG) -o build/$(EXEC_NAME)
+build/$(NAME): $(OBJ_DEBUG)
+	cc $(OBJ_DEBUG) $(LDFLAGS_DEBUG) -o build/$(NAME)
 
 build/src/%.o: src/%.c | build/src
 	cc $(CFLAGS_DEBUG) -MMD -MP -c $< -o $@
@@ -32,15 +32,15 @@ build/src/%.o: src/%.c | build/src
 build/src:
 	mkdir -p $@
 
--include $(DEP_FILES_DEBUG)
+-include $(DEP_DEBUG)
 
 ################
 # RELEASE MODE #
 ################
-release: buildrel/$(EXEC_NAME)
+release: buildrel/$(NAME)
 
-buildrel/$(EXEC_NAME): $(OBJ_FILES_RELEASE)
-	cc $(OBJ_FILES_RELEASE) $(LDFLAGS_RELEASE) -o buildrel/$(EXEC_NAME)
+buildrel/$(NAME): $(OBJ_RELEASE)
+	cc $(OBJ_RELEASE) $(LDFLAGS_RELEASE) -o buildrel/$(NAME)
 
 buildrel/src/%.o: src/%.c | buildrel/src
 	cc $(CFLAGS_RELEASE) -MMD -MP -c $< -o $@
@@ -48,7 +48,7 @@ buildrel/src/%.o: src/%.c | buildrel/src
 buildrel/src:
 	mkdir -p $@
 
--include $(DEP_FILES_RELEASE)
+-include $(DEP_RELEASE)
 
 clean:
 	rm -rf build/
