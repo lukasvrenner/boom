@@ -8,10 +8,10 @@ LDFLAGS_RELEASE = $(LDFLAGS)
 
 SRC = src/main.c src/matrix.c src/vector.c
 
-OBJ_DEBUG = $(SRC:%.c=build/%.o)
+OBJ_DEBUG = build/$(SRC:.c=.o)
 DEP_DEBUG = $(OBJ_DEBUG:.o=.d)
 
-OBJ_RELEASE = $(SRC:%.c=buildrel/%.o)
+OBJ_RELEASE = buildrel/$(SRC:.c=.o)
 DEP_RELEASE = $(OBJ_RELEASE:.o=.d)
 
 NAME = boom
