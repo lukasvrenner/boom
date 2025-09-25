@@ -13,20 +13,18 @@ int main(void)
     vec_a->rows = 3;
     vec_a->cols = 1;
 
+    vec_a->data[0] = 8;
+    vec_a->data[1] = 2;
+    vec_a->data[2] = 4;
+
     struct BoomMatrix *vec_b = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
     assert(vec_b != NULL);
     vec_b->rows = 3;
     vec_b->cols = 1;
 
-
-    double a[] = { 2, -1, 4 };
-    double b[] = { 1, 1, 0 };
-
-
-    memcpy(vec_a->data, a, sizeof(a));
-    memcpy(vec_b->data, b, sizeof(b));
-
-    /* boom_vec_cross(vec_a, vec_b, vec_b); */
+    vec_b->data[0] = 1;
+    vec_b->data[1] = 2;
+    vec_b->data[2] = 3;
 
     /* printf("%f\n", boom_vec_dot(vec_a, vec_b)); */
     boom_vec_cross(vec_a, vec_b, vec_b);

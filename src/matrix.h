@@ -16,6 +16,21 @@ struct BoomMatrix {
     double data[];
 };
 
+enum BoomErr {
+    /**
+     * There were no errors.
+     */
+    BOOM_ERR_NONE = 0,
+    /**
+     * The dimensions of the given matrices were incompatible.
+     */
+    BOOM_ERR_BAD_DIM = -1,
+    /**
+     * A division by zero was attempted.
+     */
+    BOOM_ERR_DIV_ZERO = -2,
+};
+
 /**
  * Multiplies `a` and `b`, storing the result in `out`.
  *
@@ -23,7 +38,7 @@ struct BoomMatrix {
  *
  * Returns `-1` if there are mismatched dimensions. Else returns `0`.
  */
-int boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out);
+enum BoomErr boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out);
 
 /**
  * Prints `matrix` to `stream`.

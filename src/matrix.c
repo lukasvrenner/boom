@@ -5,13 +5,13 @@
 
 #include "matrix.h"
 
-int boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out)
+enum BoomErr boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out)
 {
     if (a->cols != b->rows) {
-        return -1;
+        return BOOM_ERR_BAD_DIM;
     }
     if (out->rows != a->rows || out->cols != b->cols) {
-        return -1;
+        return BOOM_ERR_BAD_DIM;
     }
     for (size_t i = 0; i < a->rows; i++) {
         for (size_t j = 0; j < b->cols; j++) {
@@ -22,7 +22,7 @@ int boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct 
             out->data[i * out->cols + j] = dot_product;
         }
     }
-    return 0;
+    return BOOM_ERR_NONE;
 }
 
 void boom_mat_print(const struct BoomMatrix *a, FILE *stream)
