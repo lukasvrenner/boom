@@ -1,4 +1,4 @@
-CFLAGS = -std=c17 -Wall -Wextra -Wpedantic
+CFLAGS = -std=c17 -Wall -Wextra -Wpedantic -Werror
 CFLAGS_DEBUG = $(CFLAGS) -g -O0
 CFLAGS_RELEASE = $(CFLAGS) -O3
 
