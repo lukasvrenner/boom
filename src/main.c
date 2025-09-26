@@ -48,7 +48,7 @@ int main(void)
         {3, -8, 6},
     };
 
-    double b[3] = {5, 2, -9};
+    double b[3] = {3, 2, -9};
 
     memcpy(mat_a->data, a, sizeof(a));
     memcpy(mat_b->data, b, sizeof(b));
@@ -58,19 +58,27 @@ int main(void)
         puts(boom_err_str(err));
     }
 
-    boom_mat_print(mat_a, stdout);
+    puts("solution:");
     boom_mat_print(mat_b, stdout);
 
-    for (size_t i = 0; i < 3; i++) {
-        double sum = 0;
-        for (size_t j = 0; j < 3; j++) {
-            sum += a[i][j] * mat_b->data[j];
-        }
-        assert(sum == b[i]);
-    }
+
+    struct BoomMatrix *mat_c = malloc(sizeof(struct BoomMatrix) + 3 * 1 * sizeof(double));
+    assert(mat_c != NULL);
+    mat_c->rows = 3;
+    mat_c->cols = 1;
+
+    memcpy(mat_a->data, a, sizeof(a));
+    boom_mat_mul(mat_a, mat_b, mat_c);
+
+    puts("test:");
+    boom_mat_print(mat_c, stdout);
+    puts("=");
+    memcpy(mat_b->data, b, sizeof(b));
+    boom_mat_print(mat_b, stdout);
 
     free(mat_a);
     free(mat_b);
+    free(mat_c);
 
     return 0;
 }
