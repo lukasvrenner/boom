@@ -20,16 +20,21 @@ enum BoomErr {
     /**
      * There were no errors.
      */
-    BOOM_ERR_NONE = 0,
+    BOOM_ERR_NONE,
     /**
      * The dimensions of the given matrices were incompatible.
      */
-    BOOM_ERR_BAD_DIM = -1,
+    BOOM_ERR_BAD_DIM,
     /**
      * A division by zero was attempted.
      */
-    BOOM_ERR_DIV_ZERO = -2,
+    BOOM_ERR_DIV_ZERO,
 };
+
+/**
+ * Returns a text message describing `err`.
+ */
+const char *boom_err_str(enum BoomErr err);
 
 /**
  * Multiplies `a` and `b`, storing the result in `out`.
@@ -55,5 +60,7 @@ bool boom_mat_eq(const struct BoomMatrix *a, const struct BoomMatrix *b);
  * Sets `matrix` to the identity matrix.
  */
 void boom_mat_set_ident(struct BoomMatrix *a);
+
+enum BoomErr boom_mat_gaus(struct BoomMatrix *a, struct BoomMatrix *b);
 
 #endif /* MATRIX_H */
