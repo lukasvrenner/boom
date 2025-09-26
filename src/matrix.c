@@ -78,10 +78,10 @@ void boom_mat_swap_rows(struct BoomMatrix *a, size_t row_a, size_t row_b)
 
 void boom_mat_swap_cols(struct BoomMatrix *a, size_t col_a, size_t col_b)
 {
-    for (size_t col = 0; col < a->cols; col++) {
-        double temp = a->data[col * a->rows + col_a];
-        a->data[col * a->rows + col_a] = a->data[col * a->rows + col_b];
-        a->data[col * a->rows + col_b] = temp;
+    for (size_t row = 0; row < a->rows; row++) {
+        double temp = a->data[row * a->cols + col_a];
+        a->data[row * a->cols + col_a] = a->data[row * a->rows + col_b];
+        a->data[row * a->cols + col_b] = temp;
     }
 }
 
@@ -108,11 +108,13 @@ static void boom_mat_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
             boom_mat_swap_rows(b, i, best_pivot);
         }
 
-        // set the pivot to `1`.
         double div = a->data[i * a->cols + i];
+        // skip empty columns
         if (div == 0) {
             continue;
         }
+
+        // set the pivot to `1`.
         for (size_t col = i; col < a->cols; col++) {
             a->data[i * a->cols + col] /= div;
         }
@@ -146,6 +148,9 @@ static void boom_mat_elim_bac(struct BoomMatrix *a, struct BoomMatrix *b) {
         return;
     }
     for (size_t i = iters - 1; i > 0; i--) {
+        if (a->data[i * a->cols + i] == 0) {
+            continue;
+        }
         for (size_t row = 0; row < i; row++) {
             double mul = -1 * a->data[row * a->cols + i];
 
