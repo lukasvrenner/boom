@@ -9,7 +9,10 @@
 int main(void)
 {
     struct BoomMatrix *vec_a = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
-    assert(vec_a != NULL);
+    if (vec_a == NULL) {
+        perror("allocation error");
+        return 1;
+    }
     vec_a->rows = 3;
     vec_a->cols = 1;
 
@@ -18,7 +21,10 @@ int main(void)
     vec_a->data[2] = 4;
 
     struct BoomMatrix *vec_b = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
-    assert(vec_b != NULL);
+    if (vec_b == NULL) {
+        perror("allocation error");
+        return 1;
+    }
     vec_b->rows = 3;
     vec_b->cols = 1;
 
@@ -33,12 +39,18 @@ int main(void)
     free(vec_b);
 
     struct BoomMatrix *mat_a = malloc(sizeof(struct BoomMatrix) + 3 * 3 * sizeof(double));
-    assert(mat_a != NULL);
+    if (mat_a == NULL) {
+        perror("allocation error");
+        return 1;
+    }
     mat_a->rows = 3;
     mat_a->cols = 3;
 
     struct BoomMatrix *mat_b = malloc(sizeof(struct BoomMatrix) + 3 * 1 * sizeof(double));
-    assert(mat_b != NULL);
+    if (mat_b == NULL) {
+        perror("allocation error");
+        return 1;
+    }
     mat_b->rows = 3;
     mat_b->cols = 1;
 
@@ -63,7 +75,10 @@ int main(void)
 
 
     struct BoomMatrix *mat_c = malloc(sizeof(struct BoomMatrix) + 3 * 1 * sizeof(double));
-    assert(mat_c != NULL);
+    if (mat_c == NULL) {
+        perror("allocation error");
+        return 1;
+    }
     mat_c->rows = 3;
     mat_c->cols = 1;
 
