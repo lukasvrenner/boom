@@ -85,7 +85,7 @@ void boom_mat_swap_cols(struct BoomMatrix *a, size_t col_a, size_t col_b)
     }
 }
 
-static enum BoomErr boom_mat_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
+static void boom_mat_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
     assert(a->rows == b->rows);
     size_t iters = (a->rows < a->cols) ? a->rows : a->cols;
     for (size_t i = 0; i < iters; i++) {
@@ -103,10 +103,6 @@ static enum BoomErr boom_mat_elim_for(struct BoomMatrix *a, struct BoomMatrix *b
             }
         }
 
-        if (a->data[best_pivot * a->cols + i] == 0) {
-            continue;
-        }
-
         if (best_pivot != i) {
             boom_mat_swap_rows(a, i, best_pivot);
             boom_mat_swap_rows(b, i, best_pivot);
@@ -115,7 +111,7 @@ static enum BoomErr boom_mat_elim_for(struct BoomMatrix *a, struct BoomMatrix *b
         // set the pivot to `1`.
         double div = a->data[i * a->cols + i];
         if (div == 0) {
-            return BOOM_ERR_DIV_ZERO;
+            continue;
         }
         for (size_t col = i; col < a->cols; col++) {
             a->data[i * a->cols + col] /= div;
@@ -139,7 +135,6 @@ static enum BoomErr boom_mat_elim_for(struct BoomMatrix *a, struct BoomMatrix *b
             }
         }
     }
-    return BOOM_ERR_NONE;
 }
 
 static void boom_mat_elim_bac(struct BoomMatrix *a, struct BoomMatrix *b) {
@@ -171,10 +166,7 @@ enum BoomErr boom_mat_gaus(struct BoomMatrix *a, struct BoomMatrix *b)
     if (a->rows != b->rows) {
         return BOOM_ERR_BAD_DIM;
     }
-    enum BoomErr err = boom_mat_elim_for(a, b);
-    if (err != BOOM_ERR_NONE) {
-        return err;
-    }
+    boom_mat_elim_for(a, b);
     boom_mat_elim_bac(a, b);
     return BOOM_ERR_NONE;
 }
