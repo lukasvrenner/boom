@@ -16,7 +16,8 @@ const char *boom_err_str(enum BoomErr err) {
     case BOOM_ERR_DIV_ZERO:
         return "division by zero";
     }
-    return BOOM_ERR_NONE;
+    // this should be unreachable.
+    return "unknown";
 }
 
 enum BoomErr boom_mat_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out)
