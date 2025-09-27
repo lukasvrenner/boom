@@ -5,13 +5,8 @@
 #include <stdio.h>
 
 #include "matrix.h"
-
 /**
- * BOOM represents vectors as "unraveled" matrices.
- * An nxm matrix is therefore treated as a vector with length n * m.
- *
- * This has the effect that vectors can be either column or row vectors
- * and vector operations work the same regardless.
+ * BOOM represents vectors as a 1xm column matrix.
  */
 
 /**
@@ -60,42 +55,6 @@ enum BoomErr boom_vec_cross(const struct BoomMatrix *a, const struct BoomMatrix 
  * Else returns 0.
  */
 enum BoomErr boom_vec_normalize(const struct BoomMatrix *a, struct BoomMatrix *out);
-
-/**
- * Returns `true` if `a` equals `b`.
- * Else returns false.
- */
-bool boom_vec_eq(const struct BoomMatrix *a, const struct BoomMatrix *b);
-
-/**
- * Adds `a` and `b`, storing the result in `out`.
- *
- * `out` may point to the same vector as `a` or `b`.
- *
- * Returns `-1` and does not perform the multiplication if `out` has incorrect dimensions.
- * Else returns `1`.
- */
-enum BoomErr boom_vec_add(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
-
-/**
- * Subtracts `b` from `a`, storing the result in `out`.
- *
- * `out` may point to the same vector as `a` or `b`.
- *
- * Returns `-1` if there are misvecched dimensions. Else returns `0`.
- */
-enum BoomErr boom_vec_sub(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
-
-/**
- * Multiplies `a` and `scalar`, storing the result in `out`.
- *
- * `out` may point to the same vector as `a` or `b`.
- *
- * Returns `-1` if there are misvecched dimensions. Else returns `0`.
- */
-enum BoomErr boom_vec_mul_scalar(const struct BoomMatrix *a, double scalar, struct BoomMatrix *out);
-
-void boom_vec_print(const struct BoomMatrix *a, FILE *stream);
 
 /**
  * Returns `true` if `a` and `b` are orthogonal. Else returns false.

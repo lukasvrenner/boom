@@ -8,51 +8,43 @@
 
 int main(void)
 {
-    struct BoomMatrix *vec_a = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
+    struct BoomMatrix *vec_a = boom_alloc(1, 3);
     if (vec_a == NULL) {
         perror("allocation error");
         return 1;
     }
-    vec_a->rows = 3;
-    vec_a->cols = 1;
 
     vec_a->data[0] = 8;
     vec_a->data[1] = 2;
     vec_a->data[2] = 4;
 
-    struct BoomMatrix *vec_b = malloc(sizeof(struct BoomMatrix) + 3 * sizeof(double));
+    struct BoomMatrix *vec_b = boom_alloc(1, 3);
     if (vec_b == NULL) {
         perror("allocation error");
         return 1;
     }
-    vec_b->rows = 3;
-    vec_b->cols = 1;
 
     vec_b->data[0] = 1;
     vec_b->data[1] = 2;
     vec_b->data[2] = 3;
 
     boom_vec_cross(vec_a, vec_b, vec_b);
-    boom_vec_print(vec_b, stdout);
+    boom_print(vec_b, stdout);
 
     free(vec_a);
     free(vec_b);
 
-    struct BoomMatrix *mat_a = malloc(sizeof(struct BoomMatrix) + 3 * 3 * sizeof(double));
+    struct BoomMatrix *mat_a = boom_alloc(3, 3);
     if (mat_a == NULL) {
         perror("allocation error");
         return 1;
     }
-    mat_a->rows = 3;
-    mat_a->cols = 3;
 
-    struct BoomMatrix *mat_b = malloc(sizeof(struct BoomMatrix) + 3 * 1 * sizeof(double));
+    struct BoomMatrix *mat_b = boom_alloc(1, 3);
     if (mat_b == NULL) {
         perror("allocation error");
         return 1;
     }
-    mat_b->rows = 3;
-    mat_b->cols = 1;
 
     double a[3][3] = {
         {5, 2, 3},
@@ -65,31 +57,29 @@ int main(void)
     memcpy(mat_a->data, a, sizeof(a));
     memcpy(mat_b->data, b, sizeof(b));
 
-    enum BoomErr err = boom_mat_gaus(mat_a, mat_b);
+    enum BoomErr err = boom_gaus(mat_a, mat_b);
     if (err != BOOM_ERR_NONE) {
         puts(boom_err_str(err));
     }
 
     puts("solution:");
-    boom_mat_print(mat_b, stdout);
+    boom_print(mat_b, stdout);
 
 
-    struct BoomMatrix *mat_c = malloc(sizeof(struct BoomMatrix) + 3 * 1 * sizeof(double));
+    struct BoomMatrix *mat_c = boom_alloc(1, 3);
     if (mat_c == NULL) {
         perror("allocation error");
         return 1;
     }
-    mat_c->rows = 3;
-    mat_c->cols = 1;
 
     memcpy(mat_a->data, a, sizeof(a));
-    boom_mat_mul(mat_a, mat_b, mat_c);
+    boom_mul(mat_a, mat_b, mat_c);
 
     puts("test:");
-    boom_mat_print(mat_c, stdout);
+    boom_print(mat_c, stdout);
     puts("=");
     memcpy(mat_b->data, b, sizeof(b));
-    boom_mat_print(mat_b, stdout);
+    boom_print(mat_b, stdout);
 
     free(mat_a);
     free(mat_b);
