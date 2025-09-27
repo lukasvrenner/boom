@@ -231,7 +231,7 @@ enum BoomErr boom_gaus(struct BoomMatrix *a, struct BoomMatrix *b)
     return BOOM_ERR_NONE;
 }
 
-enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p)
+enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p, size_t *swaps)
 {
     if (a->rows != a->cols) {
         return BOOM_ERR_BAD_DIM;
@@ -246,6 +246,7 @@ enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p)
             size_t temp = p[i];
             p[i] = p[pivot];
             p[pivot] = temp;
+           (*swaps)++;
         }
 
         double div = a->data[i * a->cols + i];

@@ -84,7 +84,8 @@ int main(void)
     memcpy(mat_a->data, a, sizeof(a));
 
     size_t p[] = {0, 1, 2};
-    err = boom_lup_decomp(mat_a, p);
+    size_t swaps = 0;
+    err = boom_lup_decomp(mat_a, p, &swaps);
     if (err != BOOM_ERR_NONE) {
         puts(boom_err_str(err));
     }

@@ -76,6 +76,6 @@ void boom_set_ident(struct BoomMatrix *a);
 
 enum BoomErr boom_gaus(struct BoomMatrix *a, struct BoomMatrix *b);
 
-enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p);
+enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p, size_t *swaps);
 
 #endif /* MATRIX_H */
