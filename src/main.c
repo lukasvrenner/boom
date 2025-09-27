@@ -47,9 +47,9 @@ int main(void)
     }
 
     double a[3][3] = {
-        {5, 2, 3},
-        {1, 8, 9},
-        {3, -8, 6},
+        {2, 1, 4},
+        {1, 3, 2},
+        {3, 2, 1},
     };
 
     double b[3] = {3, 2, -9};
@@ -80,6 +80,16 @@ int main(void)
     puts("=");
     memcpy(mat_b->data, b, sizeof(b));
     boom_print(mat_b, stdout);
+
+    memcpy(mat_a->data, a, sizeof(a));
+
+    size_t p[] = {0, 1, 2};
+    err = boom_lup_decomp(mat_a, p);
+    if (err != BOOM_ERR_NONE) {
+        puts(boom_err_str(err));
+    }
+
+    boom_print(mat_a, stdout);
 
     free(mat_a);
     free(mat_b);

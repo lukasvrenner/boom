@@ -29,6 +29,11 @@ enum BoomErr {
      * A division by zero was attempted.
      */
     BOOM_ERR_DIV_ZERO,
+
+    /**
+     * The matrix has no inverse.
+     */
+    BOOM_ERR_NO_INV,
 };
 
 /**
@@ -70,5 +75,7 @@ bool boom_eq(const struct BoomMatrix *a, const struct BoomMatrix *b);
 void boom_set_ident(struct BoomMatrix *a);
 
 enum BoomErr boom_gaus(struct BoomMatrix *a, struct BoomMatrix *b);
+
+enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p);
 
 #endif /* MATRIX_H */

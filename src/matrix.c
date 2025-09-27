@@ -16,6 +16,8 @@ const char *boom_err_str(enum BoomErr err) {
         return "bad dimensions";
     case BOOM_ERR_DIV_ZERO:
         return "division by zero";
+    case BOOM_ERR_NO_INV:
+        return "no inverse";
     }
     // this should be unreachable.
     return "unknown";
@@ -134,20 +136,19 @@ void boom_swap_cols(struct BoomMatrix *a, size_t col_a, size_t col_b)
     }
 }
 
+/**
+ * Returns the index of the ideal pivot.
+ */
 static size_t boom_find_pivot(const struct BoomMatrix *a, size_t i)
 {
-    size_t best_pivot = i;
+    size_t pivot = i;
     for (size_t row = i; row < a->rows; row++) {
         double current = a->data[row * a->cols + i];
-        if (current == 1) {
-            best_pivot = row;
-            break;
-        } 
-        if (fabs(current) > fabs(a->data[best_pivot * a->cols + i])) {
-            best_pivot = row;
+        if (fabs(current) > fabs(a->data[pivot * a->cols + i])) {
+            pivot = row;
         }
     }
-    return best_pivot;
+    return pivot;
 }
 
 static void boom_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
@@ -155,11 +156,11 @@ static void boom_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
     size_t iters = (a->rows < a->cols) ? a->rows : a->cols;
     for (size_t i = 0; i < iters; i++) {
 
-        size_t best_pivot = boom_find_pivot(a, i);
+        size_t pivot = boom_find_pivot(a, i);
 
-        if (best_pivot != i) {
-            boom_swap_rows(a, i, best_pivot);
-            boom_swap_rows(b, i, best_pivot);
+        if (pivot != i) {
+            boom_swap_rows(a, i, pivot);
+            boom_swap_rows(b, i, pivot);
         }
 
         double div = a->data[i * a->cols + i];
@@ -206,15 +207,15 @@ static void boom_elim_bac(struct BoomMatrix *a, struct BoomMatrix *b) {
             continue;
         }
         for (size_t row = 0; row < i; row++) {
-            double mul = -1 * a->data[row * a->cols + i];
+            double mul = a->data[row * a->cols + i];
 
             for (size_t col = i; col < a->cols; col++) {
-                a->data[row * a->cols + col] += mul * a->data[i * a->cols + col];
+                a->data[row * a->cols + col] -= mul * a->data[i * a->cols + col];
             }
             assert(a->data[row * a->cols + i] == 0);
 
             for (size_t col = 0; col < b->cols; col++) {
-                b->data[row * b->cols + col] += mul * b->data[i * b->cols + col];
+                b->data[row * b->cols + col] -= mul * b->data[i * b->cols + col];
             }
         }
     }
@@ -227,5 +228,37 @@ enum BoomErr boom_gaus(struct BoomMatrix *a, struct BoomMatrix *b)
     }
     boom_elim_for(a, b);
     boom_elim_bac(a, b);
+    return BOOM_ERR_NONE;
+}
+
+enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p)
+{
+    if (a->rows != a->cols) {
+        return BOOM_ERR_BAD_DIM;
+    }
+    for (size_t i = 0; i < a->rows; i++) {
+        p[i] = i;
+    }
+    for (size_t i = 0; i < a->rows; i++) {
+        size_t pivot = boom_find_pivot(a, i);
+        if (pivot != i) {
+            boom_swap_rows(a, i, pivot);
+            size_t temp = p[i];
+            p[i] = p[pivot];
+            p[pivot] = temp;
+        }
+
+        double div = a->data[i * a->cols + i];
+        if (div == 0) {
+            return BOOM_ERR_NO_INV;
+        }
+        for (size_t row = i + 1; row < a->rows; row++) {
+            a->data[row * a->cols + i] /= div;
+            for (size_t col = i + 1; col < a->cols; col++) {
+                a->data[row * a->cols + col] -= 
+                    a->data[row * a->cols + i] * a->data[i * a->cols + col];
+            }
+        }
+    }
     return BOOM_ERR_NONE;
 }
