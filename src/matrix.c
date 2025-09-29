@@ -94,11 +94,11 @@ enum BoomErr boom_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, st
 void boom_print(const struct BoomMatrix *a, FILE *stream)
 {
     for (size_t row = 0; row < a->rows; row++) {
-        fputs("[", stream);
+        fputs("|", stream);
         for (size_t col = 0; col < a->cols; col++) {
             fprintf(stream, "%+11.6f,", a->data[row * a->cols + col]);
         }
-        fputs(" ]\n", stream);
+        fputs(" |\n", stream);
     }
 }
 
