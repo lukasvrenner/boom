@@ -9,7 +9,7 @@
  * An arbitrarily-sized row-major matrix.
  */
 struct BoomMatrix {
-    size_t cols, rows;
+    size_t rows, cols;
     /**
      * The raw data of the matrix. The length must equal `rows * cols`.
      */

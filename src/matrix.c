@@ -23,7 +23,7 @@ const char *boom_err_str(enum BoomErr err) {
     return "unknown";
 }
 
-struct BoomMatrix *boom_alloc(size_t cols, size_t rows)
+struct BoomMatrix *boom_alloc(size_t rows, size_t cols)
 {
     struct BoomMatrix *mat = malloc(sizeof(struct BoomMatrix) + rows * cols * sizeof(double));
     if (mat == NULL) {

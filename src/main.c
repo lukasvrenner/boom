@@ -31,7 +31,7 @@ int main(int argc, const char **argv)
 
 static int boom_vector_ex(void)
 {
-    struct BoomMatrix *vec_a = boom_alloc(1, 3);
+    struct BoomMatrix *vec_a = boom_alloc(3, 1);
     if (vec_a == NULL) {
         return 1;
     }
@@ -46,7 +46,7 @@ static int boom_vector_ex(void)
     puts("\033[1ma:\033[0m");
     boom_print(vec_a, stdout);
 
-    struct BoomMatrix *vec_b = boom_alloc(1, 3);
+    struct BoomMatrix *vec_b = boom_alloc(3, 1);
     if (vec_b == NULL) {
         return 1;
     }
@@ -78,7 +78,7 @@ static int boom_matrix_ex(void)
         return 1;
     }
 
-    struct BoomMatrix *mat_b = boom_alloc(1, 10);
+    struct BoomMatrix *mat_b = boom_alloc(10, 1);
     if (mat_b == NULL) {
         return 1;
     }
@@ -116,13 +116,7 @@ static int boom_matrix_ex(void)
     boom_print(mat_b, stdout);
 
 
-    struct BoomMatrix *mat_c = boom_alloc(1, 3);
-    if (mat_c == NULL) {
-        return 1;
-    }
-
     memcpy(mat_a->data, a, sizeof(a));
-    boom_mul(mat_a, mat_b, mat_c);
 
     memcpy(mat_a->data, a, sizeof(a));
 
@@ -151,6 +145,5 @@ static int boom_matrix_ex(void)
     printf("\033[1mdet(A) = \033[0m%f\n", det);
     free(mat_a);
     free(mat_b);
-    free(mat_c);
     return 0;
 }
