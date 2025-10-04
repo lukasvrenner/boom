@@ -52,9 +52,6 @@ buildrel/src:
 
 -include $(DEP_RELEASE)
 
-format:
-	indent $(SRC)
-
 clean:
 	-rm -rf build/ buildrel/
 
