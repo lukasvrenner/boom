@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "matrix.h"
+
 /**
  * BOOM represents vectors as a 1xm column matrix.
  */
@@ -26,14 +27,16 @@ double boom_vec_sqr(const struct BoomMatrix *a);
  * Calculates the projection of `a` onto `b`, storing the result in `out`.
  * Returns `-1` if `b` and `out` don't have the same number of dimensions, else returns `0`.
  */
-enum BoomErr boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
+enum BoomErr boom_vec_proj(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                           struct BoomMatrix *out);
 
 /**
  * Calculates the component of `a` onto `b`
  */
 double boom_vec_comp(const struct BoomMatrix *a, const struct BoomMatrix *b);
 
-enum BoomErr boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
+enum BoomErr boom_vec_orth(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                           struct BoomMatrix *out);
 
 /**
  * Returns the magnitude (Euclidean norm) of `a`.
@@ -45,7 +48,8 @@ double boom_vec_mag(const struct BoomMatrix *a);
  */
 double boom_vec_cos(const struct BoomMatrix *a, const struct BoomMatrix *b);
 
-enum BoomErr boom_vec_cross(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
+enum BoomErr boom_vec_cross(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                            struct BoomMatrix *out);
 
 /**
  * Computes the normalized version of `a`, storing the result in `out`.

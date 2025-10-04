@@ -8,7 +8,8 @@
 
 #include "matrix.h"
 
-const char *boom_err_str(enum BoomErr err) {
+const char *boom_err_str(enum BoomErr err)
+{
     switch (err) {
     case BOOM_ERR_NONE:
         return "none";
@@ -26,6 +27,7 @@ const char *boom_err_str(enum BoomErr err) {
 struct BoomMatrix *boom_alloc(size_t rows, size_t cols)
 {
     struct BoomMatrix *mat = malloc(sizeof(struct BoomMatrix) + rows * cols * sizeof(double));
+
     if (mat == NULL) {
         return NULL;
     }
@@ -34,7 +36,8 @@ struct BoomMatrix *boom_alloc(size_t rows, size_t cols)
     return mat;
 }
 
-enum BoomErr boom_add(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
+enum BoomErr boom_add(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                      struct BoomMatrix *out)
 {
     if (a->rows != b->rows || a->rows != out->rows) {
         return BOOM_ERR_BAD_DIM;
@@ -48,7 +51,8 @@ enum BoomErr boom_add(const struct BoomMatrix *a, const struct BoomMatrix *b, st
     return BOOM_ERR_NONE;
 }
 
-enum BoomErr boom_sub(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out)
+enum BoomErr boom_sub(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                      struct BoomMatrix *out)
 {
     if (a->rows != b->rows || a->rows != out->rows) {
         return BOOM_ERR_BAD_DIM;
@@ -73,7 +77,8 @@ enum BoomErr boom_mul_scalar(const struct BoomMatrix *a, double scalar, struct B
     return BOOM_ERR_NONE;
 }
 
-enum BoomErr boom_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out)
+enum BoomErr boom_mul(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                      struct BoomMatrix *restrict out)
 {
     if (a->cols != b->rows || out->rows != a->rows || out->cols != b->cols) {
         return BOOM_ERR_BAD_DIM;
@@ -82,6 +87,7 @@ enum BoomErr boom_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, st
     for (size_t row = 0; row < a->rows; row++) {
         for (size_t b_col = 0; b_col < b->cols; b_col++) {
             double dot_product = 0;
+
             for (size_t a_col = 0; a_col < a->cols; a_col++) {
                 dot_product += a->data[row * a->cols + a_col] * b->data[a_col * b->cols + b_col];
             }
@@ -122,6 +128,7 @@ void boom_swap_rows(struct BoomMatrix *a, size_t row_a, size_t row_b)
 {
     for (size_t col = 0; col < a->cols; col++) {
         double temp = a->data[row_a * a->cols + col];
+
         a->data[row_a * a->cols + col] = a->data[row_b * a->cols + col];
         a->data[row_b * a->cols + col] = temp;
     }
@@ -131,6 +138,7 @@ void boom_swap_cols(struct BoomMatrix *a, size_t col_a, size_t col_b)
 {
     for (size_t row = 0; row < a->rows; row++) {
         double temp = a->data[row * a->cols + col_a];
+
         a->data[row * a->cols + col_a] = a->data[row * a->rows + col_b];
         a->data[row * a->cols + col_b] = temp;
     }
@@ -142,8 +150,10 @@ void boom_swap_cols(struct BoomMatrix *a, size_t col_a, size_t col_b)
 static size_t boom_find_pivot(const struct BoomMatrix *a, size_t i)
 {
     size_t pivot = i;
+
     for (size_t row = i; row < a->rows; row++) {
         double current = a->data[row * a->cols + i];
+
         if (fabs(current) > fabs(a->data[pivot * a->cols + i])) {
             pivot = row;
         }
@@ -151,9 +161,11 @@ static size_t boom_find_pivot(const struct BoomMatrix *a, size_t i)
     return pivot;
 }
 
-static void boom_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
+static void boom_elim_for(struct BoomMatrix *a, struct BoomMatrix *b)
+{
     assert(a->rows == b->rows);
     size_t iters = (a->rows < a->cols) ? a->rows : a->cols;
+
     for (size_t i = 0; i < iters; i++) {
 
         size_t pivot = boom_find_pivot(a, i);
@@ -164,11 +176,11 @@ static void boom_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
         }
 
         double div = a->data[i * a->cols + i];
+
         // skip empty columns
         if (div == 0) {
             continue;
         }
-
         // set the pivot to `1`.
         for (size_t col = i; col < a->cols; col++) {
             a->data[i * a->cols + col] /= div;
@@ -194,7 +206,8 @@ static void boom_elim_for(struct BoomMatrix *a, struct BoomMatrix *b) {
     }
 }
 
-static void boom_elim_bac(struct BoomMatrix *a, struct BoomMatrix *b) {
+static void boom_elim_bac(struct BoomMatrix *a, struct BoomMatrix *b)
+{
     assert(a->rows == b->rows);
     size_t iters = (a->rows < a->cols) ? a->rows : a->cols;
 
@@ -241,22 +254,25 @@ enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p, size_t *swaps)
     }
     for (size_t i = 0; i < a->rows; i++) {
         size_t pivot = boom_find_pivot(a, i);
+
         if (pivot != i) {
             boom_swap_rows(a, i, pivot);
             size_t temp = p[i];
+
             p[i] = p[pivot];
             p[pivot] = temp;
-           (*swaps)++;
+            (*swaps)++;
         }
 
         double div = a->data[i * a->cols + i];
+
         if (div == 0) {
             return BOOM_ERR_NO_INV;
         }
         for (size_t row = i + 1; row < a->rows; row++) {
             a->data[row * a->cols + i] /= div;
             for (size_t col = i + 1; col < a->cols; col++) {
-                a->data[row * a->cols + col] -= 
+                a->data[row * a->cols + col] -=
                     a->data[row * a->cols + i] * a->data[i * a->cols + col];
             }
         }

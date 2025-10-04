@@ -10,6 +10,7 @@
  */
 struct BoomMatrix {
     size_t rows, cols;
+
     /**
      * The raw data of the matrix. The length must equal `rows * cols`.
      */
@@ -17,14 +18,17 @@ struct BoomMatrix {
 };
 
 enum BoomErr {
+
     /**
      * There were no errors.
      */
     BOOM_ERR_NONE,
+
     /**
      * The dimensions of the given matrices were incompatible.
      */
     BOOM_ERR_BAD_DIM,
+
     /**
      * A division by zero was attempted.
      */
@@ -43,9 +47,11 @@ const char *boom_err_str(enum BoomErr err);
 
 struct BoomMatrix *boom_alloc(size_t rows, size_t cols);
 
-enum BoomErr boom_add(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
+enum BoomErr boom_add(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                      struct BoomMatrix *out);
 
-enum BoomErr boom_sub(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *out);
+enum BoomErr boom_sub(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                      struct BoomMatrix *out);
 
 enum BoomErr boom_mul_scalar(const struct BoomMatrix *a, double scalar, struct BoomMatrix *out);
 
@@ -56,7 +62,8 @@ enum BoomErr boom_mul_scalar(const struct BoomMatrix *a, double scalar, struct B
  *
  * Returns `-1` if there are mismatched dimensions. Else returns `0`.
  */
-enum BoomErr boom_mul(const struct BoomMatrix *a, const struct BoomMatrix *b, struct BoomMatrix *restrict out);
+enum BoomErr boom_mul(const struct BoomMatrix *a, const struct BoomMatrix *b,
+                      struct BoomMatrix *restrict out);
 
 /**
  * Prints `matrix` to `stream`.
