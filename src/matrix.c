@@ -234,7 +234,7 @@ static void boom_elim_bac(struct BoomMatrix *a, struct BoomMatrix *b)
     }
 }
 
-enum BoomErr boom_gaus(struct BoomMatrix *a, struct BoomMatrix *b)
+enum BoomErr boom_gauss(struct BoomMatrix *a, struct BoomMatrix *b)
 {
     if (a->rows != b->rows) {
         return BOOM_ERR_BAD_DIM;

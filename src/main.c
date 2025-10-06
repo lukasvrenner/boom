@@ -112,7 +112,7 @@ static int boom_matrix_ex(void)
     puts("\033[1mb:\033[0m");
     boom_print(mat_b, stdout);
 
-    enum BoomErr err = boom_gaus(mat_a, mat_b);
+    enum BoomErr err = boom_gauss(mat_a, mat_b);
 
     if (err != BOOM_ERR_NONE) {
         puts(boom_err_str(err));

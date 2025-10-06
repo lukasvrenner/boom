@@ -81,8 +81,16 @@ bool boom_eq(const struct BoomMatrix *a, const struct BoomMatrix *b);
  */
 void boom_set_ident(struct BoomMatrix *a);
 
-enum BoomErr boom_gaus(struct BoomMatrix *a, struct BoomMatrix *b);
+/**
+ * Performs Gauss-Jordan elimanation on the augmented matrix of `a` and `b`.
+ */
+enum BoomErr boom_gauss(struct BoomMatrix *a, struct BoomMatrix *b);
 
+/**
+ * Performs LUP decomposition on `a` in-place.
+ * The resulting matrix stored in `a` is both L and U.
+ * The permutations are stored in `p`, and the number of swaps in `swaps`.
+ */
 enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p, size_t *swaps);
 
 #endif /* MATRIX_H */
