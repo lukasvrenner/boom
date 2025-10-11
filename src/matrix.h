@@ -93,4 +93,12 @@ enum BoomErr boom_gauss(struct BoomMatrix *a, struct BoomMatrix *b);
  */
 enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p, size_t *swaps);
 
+bool boom_is_upper(const struct BoomMatrix *a);
+
+bool boom_is_lower(const struct BoomMatrix *a);
+
+bool boom_is_trap(const struct BoomMatrix *a);
+
+bool boom_is_diag(const struct BoomMatrix *a);
+
 #endif /* MATRIX_H */

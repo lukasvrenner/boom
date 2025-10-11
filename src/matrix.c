@@ -279,3 +279,41 @@ enum BoomErr boom_lup_decomp(struct BoomMatrix *a, size_t *p, size_t *swaps)
     }
     return BOOM_ERR_NONE;
 }
+
+bool boom_is_upper(const struct BoomMatrix *a)
+{
+    size_t iters = (a->rows < a->cols) ? a->rows : a->cols;
+
+    for (size_t i = 0; i < iters; i++) {
+        for (size_t row = 0; row < i; row++) {
+            if (a->data[row * a->cols + i] != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool boom_is_lower(const struct BoomMatrix *a)
+{
+    size_t iters = (a->rows < a->cols) ? a->rows : a->cols;
+
+    for (size_t i = 0; i < iters; i++) {
+        for (size_t row = i + 1; row < iters; row++) {
+            if (a->data[row * a->cols + i] != 0) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool boom_is_trap(const struct BoomMatrix *a)
+{
+    return boom_is_upper(a) || boom_is_lower(a);
+}
+
+bool boom_is_diag(const struct BoomMatrix *a)
+{
+    return boom_is_upper(a) && boom_is_lower(a);
+}
